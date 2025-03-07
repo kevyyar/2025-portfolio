@@ -2,7 +2,7 @@ import Button from "./button";
 
 function HeroCTA() {
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-6 md:text-xl">
       <Button href="https://www.linkedin.com/in/kevyyar/">Contact Me</Button>
       <Button
         href="#projects"
