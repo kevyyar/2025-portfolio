@@ -1,3 +1,4 @@
+import Expertise from "@/components/expertise";
 import Header from "@/components/header";
 import Hero from "@/components/hero";
 
@@ -6,6 +7,7 @@ export default function Home() {
     <div>
       <Header />
       <Hero />
+      <Expertise />
     </div>
   );
 }

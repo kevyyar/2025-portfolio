@@ -1,4 +1,5 @@
 import { ArrowDown } from "lucide-react";
+import Link from "next/link";
 import Heading from "./heading";
 import HeroCTA from "./hero-cta";
 import ProfilePic from "./profile-pic";
@@ -18,7 +19,9 @@ function Hero() {
         <ProfilePic />
       </div>
       <div className="hidden col-span-2 md:flex justify-center mt-18 cursor-pointer">
-        <ArrowDown size={48} className="text-gray-600 animate-bounce" />
+        <Link href="#skills">
+          <ArrowDown size={48} className="text-gray-600 animate-bounce" />
+        </Link>
       </div>
     </section>
   );
