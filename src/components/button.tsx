@@ -32,7 +32,13 @@ function Button({
     // Use Next.js Link for internal routes (no protocol like http://)
     if (!href.startsWith("http") && !href.startsWith("#")) {
       return (
-        <Link href={href} className={mergedClasses} onClick={onClick}>
+        <Link
+          href={href}
+          className={mergedClasses}
+          onClick={onClick}
+          target={target}
+          rel={rel}
+        >
           {children}
         </Link>
       );
