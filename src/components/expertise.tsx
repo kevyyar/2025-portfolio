@@ -8,7 +8,7 @@ function Expertise() {
       className="flex flex-col my-18 px-6 gap-y-10 md:container md:mx-auto md:px-14 py-10"
     >
       <div className="text-center md:text-left">
-        <h2 className="text-5xl font-black">My Skills</h2>
+        <h2 className="text-5xl font-black md:text-7xl">My Skills</h2>
         <p className="mt-4 text-gray-500 md:text-xl">
           The tools and technologies I use:
         </p>
