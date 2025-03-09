@@ -1,14 +1,37 @@
-import { prisma } from "@/lib/prisma";
 import Project from "./project";
 
+const projects = [
+  {
+    id: 5,
+    title: "Portfolio Website",
+    description: "A personal portfolio built with Next.js and Prisma.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=500&auto=format&fit=crop&q=60",
+    githubUrl: "https://github.com/username/portfolio",
+    demoUrl: "https://portfolio.example.com",
+    createdAt: new Date(2023, 11, 1),
+    technologies: [
+      { id: 1, name: "js" },
+      { id: 2, name: "react" },
+    ],
+  },
+  {
+    id: 6,
+    title: "Task Manager",
+    description: "A task management app with real-time updates.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&auto=format&fit=crop&q=60",
+    githubUrl: "https://github.com/username/task-manager",
+    demoUrl: "https://task-manager.example.com",
+    createdAt: new Date(2023, 11, 2),
+    technologies: [
+      { id: 3, name: "js" },
+      { id: 4, name: "node" },
+    ],
+  },
+];
+
 async function ProjectsList() {
-  const projects = await prisma.project.findMany({
-    include: { technologies: true },
-    orderBy: { createdAt: "desc" },
-  });
-
-  console.log(projects);
-
   return (
     <section
       id="projects"
@@ -16,7 +39,7 @@ async function ProjectsList() {
     >
       <div className="text-center md:text-left">
         <h2 className="text-5xl font-black md:text-7xl">Featured Projects</h2>
-        <p className="mt-4 text-gray-500 md:text-xl">
+        <p className="mt-4 text-gray-500 md:text-xl leading-relaxed">
           Here are some of my recent projects. Each project reflects my passion
           for building intuitive and impactful applications.
         </p>
@@ -30,7 +53,7 @@ async function ProjectsList() {
               description={project.description}
               imageUrl={project.imageUrl}
               technologies={project.technologies}
-              githubUrl={project.githubUrl}
+              githubUrl={project?.githubUrl || undefined}
               demoUrl={project.demoUrl}
             />
           ))}

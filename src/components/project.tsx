@@ -12,7 +12,7 @@ interface ProjectProps {
   description: string;
   imageUrl: string;
   technologies: Technology[];
-  githubUrl: string;
+  githubUrl?: string;
   demoUrl: string;
 }
 
@@ -58,7 +58,7 @@ export default function Project({
         {/* Buttons */}
         <div className="flex gap-3">
           <Link
-            href={githubUrl}
+            href={githubUrl ? githubUrl : "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
