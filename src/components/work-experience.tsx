@@ -2,7 +2,7 @@ function WorkExperience() {
   return (
     <section
       id="experience"
-      className="flex flex-col my-20 px-6 gap-y-12 md:container md:mx-auto md:px-14 py-12 bg-gradient-to-br from-gray-50 to-white"
+      className="flex flex-col my-20 px-6 gap-y-12 md:container md:mx-auto md:px-14 py-12"
     >
       <div className="text-center md:text-left">
         <h2 className="text-5xl font-black text-gray-900 tracking-tight md:text-7xl">
