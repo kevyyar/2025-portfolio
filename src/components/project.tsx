@@ -1,20 +1,7 @@
+import { ProjectData } from "@/types";
 import { Code } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Technology {
-  id: number;
-  name: string;
-}
-
-interface ProjectProps {
-  title: string;
-  description: string;
-  imageUrl: string;
-  technologies: Technology[];
-  githubUrl?: string;
-  demoUrl: string;
-}
 
 export default function Project({
   title,
@@ -23,7 +10,7 @@ export default function Project({
   technologies,
   githubUrl,
   demoUrl,
-}: ProjectProps) {
+}: ProjectData) {
   return (
     <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-gray-50">
       {/* Image Section */}
@@ -47,10 +34,10 @@ export default function Project({
         <div className="flex flex-wrap gap-2 mb-4">
           {technologies.map((tech) => (
             <span
-              key={tech.id}
+              key={tech}
               className="inline-block bg-gray-200 text-gray-800 text-sm font-semibold px-3 py-1 rounded-full"
             >
-              {tech.name}
+              {tech}
             </span>
           ))}
         </div>
@@ -67,7 +54,7 @@ export default function Project({
             Code
           </Link>
           <Link
-            href={demoUrl}
+            href={demoUrl as string}
             target="_blank"
             rel="noopener noreferrer"
             className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
