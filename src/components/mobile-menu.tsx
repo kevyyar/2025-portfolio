@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import Button from "./button";
+import { Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import Button from './button';
 
 function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,13 +13,10 @@ function MobileMenu() {
 
   return (
     <div className="md:hidden">
-      <Menu
-        onClick={handleClick}
-        className="text-2xl cursor-pointer md:hidden"
-      />
+      <Menu onClick={handleClick} className="text-2xl cursor-pointer md:hidden" />
       <div
         className={`fixed inset-y-0 left-0 z-10 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+          isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex justify-end p-4">

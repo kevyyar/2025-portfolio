@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import { z } from "zod";
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const projectSchema = z.object({
   title: z.string().min(1).max(255),
@@ -11,14 +11,12 @@ const projectSchema = z.object({
     .string()
     .optional()
     .refine(
-      (val) => {
+      val => {
         // Allow empty string or valid URL
-        return (
-          val === "" || val === "#" || z.string().url().safeParse(val).success
-        );
+        return val === '' || val === '#' || z.string().url().safeParse(val).success;
       },
       {
-        message: "Invalid url",
+        message: 'Invalid url',
       }
     ),
   demoUrl: z.string().url(),
@@ -33,8 +31,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: parsed.error.errors }, { status: 400 });
     }
 
-    const { title, description, imageUrl, technologies, githubUrl, demoUrl } =
-      parsed.data;
+    const { title, description, imageUrl, technologies, githubUrl, demoUrl } = parsed.data;
 
     const project = await prisma.project.create({
       data: {
@@ -49,11 +46,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json(project, { status: 201 });
   } catch (error) {
-    console.error("Error creating project:", error);
-    return NextResponse.json(
-      { error: "Failed to create project" },
-      { status: 500 }
-    );
+    console.error('Error creating project:', error);
+    return NextResponse.json({ error: 'Failed to create project' }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }

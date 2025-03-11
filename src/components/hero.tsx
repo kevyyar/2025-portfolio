@@ -1,10 +1,10 @@
-import { ArrowDown } from "lucide-react";
-import Link from "next/link";
-import Heading from "./heading";
-import HeroCTA from "./hero-cta";
-import ProfilePic from "./profile-pic";
-import SocialIcons from "./social-icons";
-import Subheading from "./subheading";
+import { ArrowDown } from 'lucide-react';
+import Link from 'next/link';
+import Heading from './heading';
+import HeroCTA from './hero-cta';
+import ProfilePic from './profile-pic';
+import SocialIcons from './social-icons';
+import Subheading from './subheading';
 
 function Hero() {
   return (

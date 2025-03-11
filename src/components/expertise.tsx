@@ -1,5 +1,5 @@
-import { devIcons } from "@/utils/icons";
-import Image from "next/image";
+import { devIcons } from '@/utils/icons';
+import Image from 'next/image';
 
 function Expertise() {
   return (
@@ -9,20 +9,18 @@ function Expertise() {
     >
       <div className="text-center md:text-left">
         <h2 className="text-5xl font-black md:text-7xl">My Skills</h2>
-        <p className="mt-4 text-gray-500 md:text-xl">
-          The tools and technologies I use:
-        </p>
+        <p className="mt-4 text-gray-500 md:text-xl">The tools and technologies I use:</p>
       </div>
       <div className="flex justify-center">
         <div className="grid grid-cols-4 gap-4 md:gap-12 max-w-md md:max-w-3xl">
-          {devIcons.map((icon) => (
+          {devIcons.map(icon => (
             <div key={icon.name} className="flex justify-center items-center">
               <Image
                 src={icon.iconUrl}
                 width={60}
                 height={60}
                 alt={icon.name}
-                className="object-contain md:w-[100px] md:h-[100px]" 
+                className="object-contain md:w-[100px] md:h-[100px]"
                 sizes="(max-width: 768px) 60px, 100px"
               />
             </div>

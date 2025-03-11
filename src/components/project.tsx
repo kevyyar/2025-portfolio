@@ -1,7 +1,7 @@
-import { ProjectData } from "@/types";
-import { Code } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { ProjectData } from '@/types';
+import { Code } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Project({
   title,
@@ -32,7 +32,7 @@ export default function Project({
 
         {/* Technologies */}
         <div className="flex flex-wrap gap-2 mb-4">
-          {technologies.map((tech) => (
+          {technologies.map(tech => (
             <span
               key={tech}
               className="inline-block bg-gray-200 text-gray-800 text-sm font-semibold px-3 py-1 rounded-full"
@@ -45,7 +45,7 @@ export default function Project({
         {/* Buttons */}
         <div className="flex gap-3">
           <Link
-            href={githubUrl ? githubUrl : "#"}
+            href={githubUrl ? githubUrl : '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"

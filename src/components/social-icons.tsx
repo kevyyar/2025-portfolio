@@ -1,5 +1,5 @@
-import { GithubIcon, LinkedinIcon, MailIcon } from "lucide-react";
-import Link from "next/link";
+import { GithubIcon, LinkedinIcon, MailIcon } from 'lucide-react';
+import Link from 'next/link';
 
 function SocialIcons() {
   return (
