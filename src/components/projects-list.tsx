@@ -27,6 +27,7 @@ async function ProjectsList() {
           {projects.map(project => (
             <Project
               key={project.id}
+              id={project.id}
               title={project.title}
               description={project.description}
               imageUrl={project.imageUrl}

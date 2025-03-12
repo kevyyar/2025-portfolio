@@ -15,7 +15,7 @@ function Header() {
         <ul className="hidden md:flex md:gap-x-4">
           <li>
             <Link
-              href="#about"
+              href="/#about"
               id="nav-about"
               aria-label="About section"
               className="hover:text-blue-500 transition-colors"
@@ -25,7 +25,7 @@ function Header() {
           </li>
           <li>
             <Link
-              href="#skills"
+              href="/#skills"
               id="nav-skills"
               aria-label="Skills section"
               className="hover:text-blue-500 transition-colors"
@@ -35,7 +35,7 @@ function Header() {
           </li>
           <li>
             <Link
-              href="#projects"
+              href="/#projects"
               id="nav-projects"
               aria-label="Projects section"
               className="hover:text-blue-500 transition-colors"
@@ -45,7 +45,7 @@ function Header() {
           </li>
           <li>
             <Link
-              href="#experience"
+              href="/#experience"
               id="nav-experience"
               aria-label="Experience section"
               className="hover:text-blue-500 transition-colors"
@@ -55,7 +55,7 @@ function Header() {
           </li>
           <li>
             <Link
-              href="#contact"
+              href="/#contact"
               id="nav-contact"
               aria-label="Contact section"
               className="hover:text-blue-500 transition-colors"

@@ -4,13 +4,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Project({
+  id,
   title,
   description,
   imageUrl,
   technologies,
   githubUrl,
   demoUrl,
-}: ProjectData) {
+}: ProjectData & {id: number}) {
   return (
     <div className="max-w-sm rounded-lg overflow-hidden shadow-lg bg-gray-50">
       {/* Image Section */}
@@ -27,7 +28,9 @@ export default function Project({
 
       {/* Content Section */}
       <div className="p-6">
-        <h2 className="text-2xl font-bold mb-2">{title}</h2>
+        <Link href={`/projects/${id}`} className="hover:underline">
+          <h2 className="text-2xl font-bold mb-2">{title}</h2>
+        </Link>
         <p className="text-gray-600 mb-4">{description}</p>
 
         {/* Technologies */}
