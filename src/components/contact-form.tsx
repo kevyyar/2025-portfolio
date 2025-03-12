@@ -1,33 +1,44 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import Button from './button';
 
-interface FormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  username: string; // honeypot field
-}
+const contactFormSchema = z.object({
+  name: z.string().min(1, 'Name is required').max(100),
+  email: z.string().email('Invalid email address').max(100),
+  subject: z.string().min(1, 'Subject is required').max(200),
+  message: z.string().min(1, 'Message is required').max(1000),
+  username: z.string().max(0, 'Nice try, bot!'), // honeypot
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
 
 function ContactForm() {
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    username: '',
-  });
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-  const [isLoading, setIsLoading] = useState(false);
   const [lastSubmissionTime, setLastSubmissionTime] = useState(0);
 
-  // Add rate limiting check
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+      username: '',
+    },
+  });
+
   const checkRateLimit = (): boolean => {
     const now = Date.now();
     const timeSinceLastSubmission = now - lastSubmissionTime;
-    const minimumWaitTime = 60000; // 1 minute in milliseconds
+    const minimumWaitTime = 60000; // 1 minute
 
     if (timeSinceLastSubmission < minimumWaitTime) {
       const waitTimeSeconds = Math.ceil((minimumWaitTime - timeSinceLastSubmission) / 1000);
@@ -37,51 +48,8 @@ function ContactForm() {
     return true;
   };
 
-  const validateForm = (): boolean => {
-    const newErrors: Partial<FormData> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email';
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required';
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    // Check honeypot
-    if (formData.username) {
-      console.log('Bot detected');
-      return;
-    }
-
-    // Check rate limit
-    if (!checkRateLimit()) {
-      return;
-    }
-
-    setIsLoading(true);
-
-    if (!validateForm()) {
-      setIsLoading(false);
-      return;
-    }
+  const onSubmit = async (data: ContactFormData) => {
+    if (!checkRateLimit()) return;
 
     try {
       const response = await fetch('/api/contact', {
@@ -89,49 +57,29 @@ function ContactForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
 
-      const data = await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to send message');
+        throw new Error(result.error || 'Failed to send message');
       }
 
-      // Update last submission time
       setLastSubmissionTime(Date.now());
-
-      // Reset form after successful submission
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
-        username: '',
-      });
-
-      setIsLoading(false);
+      reset();
       alert('Message sent successfully!');
     } catch (error) {
       console.error('Error sending message:', error);
       alert('Failed to send message. Please try again.');
-      setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-auto space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg mx-auto space-y-6">
       {/* Honeypot field */}
       <div className="hidden">
-        <input
-          type="text"
-          name="username"
-          id="username"
-          value={formData.username}
-          onChange={e => setFormData({ ...formData, username: e.target.value })}
-          tabIndex={-1}
-          autoComplete="off"
-        />
+        <input type="text" {...register('username')} tabIndex={-1} autoComplete="off" />
       </div>
 
       <div>
@@ -141,14 +89,12 @@ function ContactForm() {
         <input
           type="text"
           id="name"
-          value={formData.name}
-          onChange={e => setFormData({ ...formData, name: e.target.value })}
-          onBlur={() => validateForm()}
+          {...register('name')}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             errors.name ? 'border-red-500' : 'border-gray-300'
           }`}
         />
-        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
+        {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
       </div>
 
       <div>
@@ -158,14 +104,12 @@ function ContactForm() {
         <input
           type="email"
           id="email"
-          value={formData.email}
-          onChange={e => setFormData({ ...formData, email: e.target.value })}
-          onBlur={() => validateForm()}
+          {...register('email')}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             errors.email ? 'border-red-500' : 'border-gray-300'
           }`}
         />
-        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
+        {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
       </div>
 
       <div>
@@ -175,14 +119,12 @@ function ContactForm() {
         <input
           type="text"
           id="subject"
-          value={formData.subject}
-          onChange={e => setFormData({ ...formData, subject: e.target.value })}
-          onBlur={() => validateForm()}
+          {...register('subject')}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             errors.subject ? 'border-red-500' : 'border-gray-300'
           }`}
         />
-        {errors.subject && <p className="mt-1 text-sm text-red-500">{errors.subject}</p>}
+        {errors.subject && <p className="mt-1 text-sm text-red-500">{errors.subject.message}</p>}
       </div>
 
       <div>
@@ -191,20 +133,22 @@ function ContactForm() {
         </label>
         <textarea
           id="message"
-          value={formData.message}
-          onChange={e => setFormData({ ...formData, message: e.target.value })}
-          onBlur={() => validateForm()}
           rows={4}
+          {...register('message')}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             errors.message ? 'border-red-500' : 'border-gray-300'
           }`}
         />
-        {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
+        {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message.message}</p>}
       </div>
 
       <div>
-        <Button type="submit" className={`w-full cursor-pointer ${isLoading ? 'bg-gray-300' : ''}`}>
-          {isLoading ? 'Sending...' : 'Send Message'}
+        <Button
+          type="submit"
+          className={`w-full ${isSubmitting ? 'bg-gray-300' : 'cursor-pointer'}`}
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Sending...' : 'Send Message'}
         </Button>
       </div>
     </form>
