@@ -13,6 +13,7 @@ interface ButtonProps {
   target?: '_blank' | '_self' | '_parent' | '_top';
   rel?: string;
   type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
 }
 
 function Button({
@@ -25,6 +26,7 @@ function Button({
   target,
   rel,
   type = 'button',
+  disabled = false
 }: ButtonProps) {
   const baseStyles = 'px-4 py-2 rounded-md inline-block';
   const mergedClasses = twMerge(baseStyles, bgColor, textColor, className);
@@ -45,7 +47,7 @@ function Button({
   }
 
   return (
-    <button type={type} className={mergedClasses} onClick={onClick}>
+    <button type={type} className={mergedClasses} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );

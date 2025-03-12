@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import Button from './button';
 
 interface FormData {
@@ -8,6 +8,7 @@ interface FormData {
   email: string;
   subject: string;
   message: string;
+  username: string; // honeypot field
 }
 
 function ContactForm() {
@@ -16,9 +17,25 @@ function ContactForm() {
     email: '',
     subject: '',
     message: '',
+    username: '',
   });
-
   const [errors, setErrors] = useState<Partial<FormData>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [lastSubmissionTime, setLastSubmissionTime] = useState(0);
+
+  // Add rate limiting check
+  const checkRateLimit = (): boolean => {
+    const now = Date.now();
+    const timeSinceLastSubmission = now - lastSubmissionTime;
+    const minimumWaitTime = 60000; // 1 minute in milliseconds
+
+    if (timeSinceLastSubmission < minimumWaitTime) {
+      const waitTimeSeconds = Math.ceil((minimumWaitTime - timeSinceLastSubmission) / 1000);
+      alert(`Please wait ${waitTimeSeconds} seconds before sending another message.`);
+      return false;
+    }
+    return true;
+  };
 
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {};
@@ -48,24 +65,75 @@ function ContactForm() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    // Check honeypot
+    if (formData.username) {
+      console.log('Bot detected');
       return;
     }
 
-    // Here you would typically send the form data to your backend
-    console.log('Form submitted:', formData);
+    // Check rate limit
+    if (!checkRateLimit()) {
+      return;
+    }
 
-    // Reset form after successful submission
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    });
+    setIsLoading(true);
+
+    if (!validateForm()) {
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to send message');
+      }
+
+      // Update last submission time
+      setLastSubmissionTime(Date.now());
+
+      // Reset form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+        username: '',
+      });
+
+      setIsLoading(false);
+      alert('Message sent successfully!');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
+      setIsLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-lg mx-auto space-y-6">
+      {/* Honeypot field */}
+      <div className="hidden">
+        <input
+          type="text"
+          name="username"
+          id="username"
+          value={formData.username}
+          onChange={e => setFormData({ ...formData, username: e.target.value })}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
           Name
@@ -74,7 +142,7 @@ function ContactForm() {
           type="text"
           id="name"
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={e => setFormData({ ...formData, name: e.target.value })}
           onBlur={() => validateForm()}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             errors.name ? 'border-red-500' : 'border-gray-300'
@@ -91,7 +159,7 @@ function ContactForm() {
           type="email"
           id="email"
           value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          onChange={e => setFormData({ ...formData, email: e.target.value })}
           onBlur={() => validateForm()}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             errors.email ? 'border-red-500' : 'border-gray-300'
@@ -108,7 +176,7 @@ function ContactForm() {
           type="text"
           id="subject"
           value={formData.subject}
-          onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+          onChange={e => setFormData({ ...formData, subject: e.target.value })}
           onBlur={() => validateForm()}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
             errors.subject ? 'border-red-500' : 'border-gray-300'
@@ -124,7 +192,7 @@ function ContactForm() {
         <textarea
           id="message"
           value={formData.message}
-          onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+          onChange={e => setFormData({ ...formData, message: e.target.value })}
           onBlur={() => validateForm()}
           rows={4}
           className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
@@ -135,8 +203,8 @@ function ContactForm() {
       </div>
 
       <div>
-        <Button type="submit" className="w-full cursor-pointer">
-          Send Message
+        <Button type="submit" className={`w-full cursor-pointer ${isLoading ? 'bg-gray-300' : ''}`}>
+          {isLoading ? 'Sending...' : 'Send Message'}
         </Button>
       </div>
     </form>
