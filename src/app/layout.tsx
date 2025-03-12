@@ -1,5 +1,5 @@
-import Header from '@/components/header';
 import Footer from '@/components/footer';
+import Header from '@/components/header';
 import JsonLd from '@/components/json-ld';
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
@@ -58,7 +58,13 @@ export const metadata: Metadata = {
     creator: '@kevyyar',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/apple-icon.png', type: 'image/png', sizes: '180x180' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
   },
   robots: {
     index: true,
