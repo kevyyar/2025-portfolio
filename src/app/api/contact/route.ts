@@ -22,11 +22,10 @@ const contactFormSchema = z.object({
 
 async function getRateLimitInfo(ip: string) {
   const key = `ratelimit:${ip}`;
-  const now = Date.now();
   const window = 60 * 1000; // 1 minute window
   const limit = 2; // 2 requests per minute
 
-  const count = await redis.incr(key);
+  const count = await redis.incr(key);  
   if (count === 1) {
     await redis.pexpire(key, window);
   }
@@ -64,7 +63,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { data, error } = await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'Contact Form <onboarding@resend.dev>',
       to: 'barretokevin@hotmail.com',
       replyTo: email,
@@ -80,7 +79,7 @@ export async function POST(request: Request) {
         <p><small>IP: ${ip}</small></p>
       `,
       headers: {
-        'X-Entity-Ref-ID': crypto.randomUUID(), // Unique ID for each email
+        'X-Entity-Ref-ID': crypto.randomUUID(),
       },
     });
 
