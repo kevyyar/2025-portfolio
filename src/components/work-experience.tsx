@@ -26,7 +26,7 @@ function WorkExperience() {
             </div>
           </div>
           <div className="mt-6">
-            <p className="text-gray-700 leading-relaxed md:text-xl">
+            <p className="text-gray-500 leading-relaxed md:text-lg">
               As a Software Developer at Softtek, a dynamic consulting firm, I have contributed to a
               diverse array of projects for clients spanning multiple industries, delivering
               tailored web solutions that address unique client needs and challenges. I work
@@ -51,7 +51,7 @@ function WorkExperience() {
             </div>
           </div>
           <div className="mt-6">
-            <p className="text-gray-700 leading-relaxed md:text-xl">
+            <p className="text-gray-500 leading-relaxed md:text-lg">
               As a self-taught freelancer, I independently developed a range of projects for
               clients, including a fully functional eCommerce site built with WordPress and various
               other custom websites tailored to specific client requirements. Through hands-on

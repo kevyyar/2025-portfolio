@@ -1,4 +1,5 @@
 import Header from '@/components/header';
+import Footer from '@/components/footer';
 import JsonLd from '@/components/json-ld';
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
@@ -84,7 +85,8 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} font-sans ${jetBrainsMono.variable} font-mono`}>
         <Header />
-        {children}
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );
