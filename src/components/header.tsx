@@ -56,7 +56,7 @@ function Header() {
         </ul>
         <div className="hidden md:flex">
           <Button
-            href="https://www.github.com/kevyyar"
+            href="https://www.linkedin.com/in/kevyyar/"
             bgColor="bg-blue-500"
             textColor="text-white"
             target="_blank"
