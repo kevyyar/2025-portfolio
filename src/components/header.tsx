@@ -15,16 +15,6 @@ function Header() {
         <ul className="hidden md:flex md:gap-x-4">
           <li>
             <Link
-              href="/#about"
-              id="nav-about"
-              aria-label="About section"
-              className="hover:text-blue-500 transition-colors"
-            >
-              About
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/#skills"
               id="nav-skills"
               aria-label="Skills section"
